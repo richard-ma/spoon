@@ -8,6 +8,12 @@
 from itemadapter import ItemAdapter
 
 
+class SinaTopSummaryPipeline:
+    def process_item(self, item, spider):
+        print(item)
+        return item
+
+
 class SpoonPipeline:
     def process_item(self, item, spider):
         return item
