@@ -9,7 +9,7 @@ import scrapy
 class SinaTopSummaryItem(scrapy.Item):
     ranking = scrapy.Field()
     summary = scrapy.Field()
-    crawl_time = scrapy.Field()
+    last_update = scrapy.Field(serializer=str)
 
 
 class SpoonItem(scrapy.Item):

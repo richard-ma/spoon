@@ -1,4 +1,5 @@
 import scrapy
+from datetime import datetime
 
 from spoon.items import SinaTopSummaryItem
 
@@ -14,5 +15,6 @@ class SinatopsummarySpider(scrapy.Spider):
             item = SinaTopSummaryItem()
             item['ranking'] = tr.xpath('./td[contains(@class, "ranktop")]/text()').extract_first()
             item['summary'] = tr.xpath('./td[@class="td-02"]/a/text()').extract_first()
+            item['last_update'] = datetime.now()
 
             yield item
