@@ -6,6 +6,12 @@
 import scrapy
 
 
+class SinaTopSummaryItem(scrapy.Item):
+    ranking = scrapy.Field()
+    summary = scrapy.Field()
+    crawl_time = scrapy.Field()
+
+
 class SpoonItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
