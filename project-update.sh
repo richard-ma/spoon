@@ -12,7 +12,7 @@ function msg() {
 project_name="$1"
 scrapyd_folder="$2"
 
-if [ "" = "$project_name" || "" = "$scrapyd_folder" ]; then
+if [ "" = "$project_name" ] || [ "" = "$scrapyd_folder" ]; then
   echo_help
   exit 1
 fi
