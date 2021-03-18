@@ -9,6 +9,7 @@ import scrapy
 class SinaTopSummaryItem(scrapy.Item):
     ranking = scrapy.Field()
     summary = scrapy.Field()
+    link = scrapy.Field()
     last_update = scrapy.Field(serializer=str)
 
 
