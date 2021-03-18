@@ -8,34 +8,38 @@
 from itemadapter import ItemAdapter
 
 import pymongo
-from scrapy.utils.project import get_project_settings
 from scrapy.exceptions import DropItem
 
 
 class SinaTopSummaryPipeline:
-    def __init__(self):
-        self.settings = get_project_settings()
-        self.connection = None
+    COLLECTION_NAME = 'top_summary'
+
+    def __init__(self, mongo_uri, mongo_db):
+        self.mongo_uri = mongo_uri
+        self.mongo_db = mongo_db
+        self.client = None
         self.db = None
-        self.collection = None
+
+    @classmethod
+    def from_crawler(cls, crawler):
+        return cls(
+            mongo_uri=crawler.settings.get('MONGO_URI'),
+            mongo_db=crawler.settings.get('MONGO_DATABASE')
+        )
 
     def open_spider(self, spider):
-        self.connection = pymongo.MongoClient(
-            self.settings['MONGODB_SERVER'],
-            self.settings['MONGODB_PORT']
-        )
-        self.db = self.connection[self.settings['MONGODB_DB']]
-        self.collection = self.db[self.settings['MONGODB_COLLECTION']]
+        self.client = pymongo.MongoClient(self.mongo_uri)
+        self.db = self.client[self.mongo_db]
 
     def close_spider(self, spider):
-        self.connection.close()
+        self.client.close()
 
     def process_item(self, item, spider):
         if item.get('summary'):
             if item.get('ranking') is None:
                 item['ranking'] = 0
 
-            self.collection.insert(dict(item))
+            self.db[self.COLLECTION_NAME].insert_one(ItemAdapter(item).asdict())
 
             return item
         else:
