@@ -31,10 +31,15 @@ class SinaTopSummaryPipeline:
         self.connection.close()
 
     def process_item(self, item, spider):
-        self.collection.insert(dict(item))
-        # log.msg("Question added to MongoDB database!",
-        #         level=log.DEBUG, spider=spider)
-        return item
+        if item.get('summary'):
+            if item.get('ranking') is None:
+                item['ranking'] = 0
+
+            self.collection.insert(dict(item))
+
+            return item
+        else:
+            raise DropItem("Summary is None")
 
 
 class SpoonPipeline:
