@@ -36,7 +36,7 @@ fi
 # update requiements.txt
 msg "PIP Install"
 if [ -f "requirements.txt" ]; then
-  pip install -r requirements.txt
+  pip3 install -r requirements.txt
 fi
 msg "PIP Install Completed"
 
