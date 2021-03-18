@@ -2,7 +2,7 @@
 
 function echo_help() {
   echo "Usage: "
-  echo "  ./project-update.sh [project-name]"
+  echo "  ./project-update.sh [project-name] [scrapyd_folder]"
 }
 
 function msg() {
@@ -10,8 +10,9 @@ function msg() {
 }
 
 project_name="$1"
+scrapyd_folder="$2"
 
-if [ "" = "$project_name" ]; then
+if [ "" = "$project_name" || "" = "$scrapyd_folder" ]; then
   echo_help
   exit 1
 fi
@@ -46,3 +47,18 @@ msg "Changing To $project_name Folder"
 msg "Deploying Project"
 scrapyd-deploy
 msg "Deployed Project"
+
+# deactivate venv
+deactivate
+msg "Deactivate $project_name venv"
+
+# update scrapyd env
+source "$scrapyd_folder"/bin/activate
+msg "Start scrapyd venv"
+msg "PIP Install"
+if [ -f "requirements.txt" ]; then
+  pip3 install -r requirements.txt
+fi
+msg "PIP Install Completed"
+deactivate
+msg "Deactivate $scrapyd_folder venv"
