@@ -15,12 +15,20 @@ from scrapy.exceptions import DropItem
 class SinaTopSummaryPipeline:
     def __init__(self):
         self.settings = get_project_settings()
-        connection = pymongo.MongoClient(
+        self.connection = None
+        self.db = None
+        self.collection = None
+
+    def open_spider(self, spider):
+        self.connection = pymongo.MongoClient(
             self.settings['MONGODB_SERVER'],
             self.settings['MONGODB_PORT']
         )
-        db = connection[self.settings['MONGODB_DB']]
-        self.collection = db[self.settings['MONGODB_COLLECTION']]
+        self.db = self.connection[self.settings['MONGODB_DB']]
+        self.collection = self.db[self.settings['MONGODB_COLLECTION']]
+
+    def close_spider(self, spider):
+        self.connection.close()
 
     def process_item(self, item, spider):
         self.collection.insert(dict(item))
