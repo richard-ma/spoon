@@ -24,8 +24,9 @@ git log -2
 msg "Git Pull Completed"
 
 # update scrapyd env
-if [ -f "$scrapy_folder"/bin/activate ]; then
-  source "$scrapyd_folder"/bin/activate
+scrapyd_activate="$scrapyd_folder/bin/activate"
+if [ -f "$scrapyd_activate" ]; then
+  source "$scrapyd_activate"
   msg "Start scrapyd venv"
   msg "PIP Install"
   if [ -f "requirements.txt" ]; then
@@ -35,7 +36,7 @@ if [ -f "$scrapy_folder"/bin/activate ]; then
   deactivate
   msg "Deactivate $scrapyd_folder venv"
 else
-  msg "ERROR: Cann't find $scrapyd_folder"
+  msg "ERROR: Cann't find $scrapyd_activate"
   exit 1
 fi
 
