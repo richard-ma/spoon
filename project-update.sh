@@ -23,6 +23,22 @@ git pull origin main --depth=1
 git log -2
 msg "Git Pull Completed"
 
+# update scrapyd env
+if [ -f "$scrapy_folder"/bin/activate ]; then
+  source "$scrapyd_folder"/bin/activate
+  msg "Start scrapyd venv"
+  msg "PIP Install"
+  if [ -f "requirements.txt" ]; then
+    pip3 install -r requirements.txt
+  fi
+  msg "PIP Install Completed"
+  deactivate
+  msg "Deactivate $scrapyd_folder venv"
+else
+  msg "ERROR: Cann't find $scrapyd_folder"
+  exit 1
+fi
+
 # checking venv
 if [ -d "venv" ]; then
   source venv/bin/activate
@@ -51,14 +67,3 @@ msg "Deployed Project"
 # deactivate venv
 deactivate
 msg "Deactivate $project_name venv"
-
-# update scrapyd env
-source "$scrapyd_folder"/bin/activate
-msg "Start scrapyd venv"
-msg "PIP Install"
-if [ -f "requirements.txt" ]; then
-  pip3 install -r requirements.txt
-fi
-msg "PIP Install Completed"
-deactivate
-msg "Deactivate $scrapyd_folder venv"
