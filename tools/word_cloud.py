@@ -9,11 +9,6 @@ top_n = 100
 client = pymongo.MongoClient(MONGO_URI)
 db = client[MONGO_DATABASE]
 
-pipeline = [
-    {"$group": {"_id": "$summary", "count": {"$sum": 1}}},
-    {"$sort": {"count": -1}}
-]
-
 counter = dict()
 items = list(db["top_summary"].find())
 for item in items:
